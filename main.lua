@@ -130,20 +130,23 @@ function move_ball(dt)
 end
 
 function paddleContact()
+
   paddleArea = 200 * 30 -- = 6000
   ballArea = 25 * 25 -- = 625
-  paddleLow = x
-  paddleHigh = x + 200
 
-  for _,v in pairs(balls) do
-    if v.y + 20 >= y and v.y <= y + 30 then
-      if v.x >= paddleLow and v.x <= paddleHigh then
-        popSound:play()
-        paddleHits = paddleHits + 1
-        if v.direction == "downRight" then
-          v.direction = "upRight"
-        elseif v.direction == "downLeft" then
-          v.direction = "upLeft"
+  for _,ball in pairs(balls) do
+    for _,paddle in pairs(paddles) do
+      paddleLow = paddle.x
+      paddleHigh = paddle.x + 200
+      if ball.y + 20 >= paddle.y and ball.y <= paddle.y + 30 then
+        if ball.x >= paddleLow and ball.x <= paddleHigh then
+          popSound:play()
+          paddleHits = paddleHits + 1
+          if ball.direction == "downRight" then
+            ball.direction = "upRight"
+          elseif ball.direction == "downLeft" then
+            ball.direction = "upLeft"
+          end
         end
       end
     end
