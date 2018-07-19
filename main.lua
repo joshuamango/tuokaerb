@@ -22,10 +22,10 @@ function love.load()
   end
 
   --Paddle initial x and y (roughly centered)
-  --createPaddle(#paddles, 400, 500)
-  --x = 400
-  --y = 500
-  --paddleHits = 0
+  createPaddle(#paddles, 400, 500)
+  x = 400
+  y = 500
+  paddleHits = 0
 
   ballMoveSpeed = 5
   direction = "downRight"
@@ -78,8 +78,6 @@ function love.draw()
     love.graphics.rectangle("fill", v.x, v.y, 200, 20)
   end
 
-  love.graphics.rectangle("fill", x, y, 200, 20)
-  love.graphics.line(0, 550, 600, 550)
   love.graphics.print("Use wasd keys", 375, 550)
   love.graphics.print("Paddle Hits: " .. paddleHits, 375, 250)
 end
@@ -87,23 +85,7 @@ end
 --TODO: Paddle only needs to move left and right
 function move_paddle(dt)
   for _,v in pairs(paddles) do
-    if love.keyboard.isDown("w") and love.keyboard.isDown("a") then
-      v.y = v.y - 500 * dt
-      v.x = v.x - 500 * dt
-    elseif love.keyboard.isDown("w") and love.keyboard.isDown("d") then
-      v.y = v.y - 500 * dt
-      v.x = v.x + 500 * dt
-    elseif love.keyboard.isDown("s") and love.keyboard.isDown("d") then
-      v.y = v.y + 500 * dt
-      v.x = v.x + 500 * dt
-    elseif love.keyboard.isDown("s") and love.keyboard.isDown("a") then
-      v.y = v.y + 500 * dt
-      v.x = v.x - 500 * dt
-    elseif love.keyboard.isDown("w") then
-      v.y = v.y - 500 * dt
-    elseif love.keyboard.isDown("s") then
-      v.y = v.y + 500 * dt
-    elseif love.keyboard.isDown("a") then
+    if love.keyboard.isDown("a") then
       v.x = v.x - 500 * dt
     elseif love.keyboard.isDown("d") then
       v.x = v.x + 500 * dt
