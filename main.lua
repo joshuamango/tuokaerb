@@ -2,16 +2,23 @@ function love.load()
 
   -- Table that contains each ball
   balls = {}
+
+  -- Table that contains each paddle (may add multiplayer in the future)
   paddles = {}
+
+  -- Upcoming feature (^_^)
   power_up_definitions = {
     speed = {factor = 2, time = 20}
   }
   power_ups = {}
-  timer = 0
-  noneLost = true
-  paused = false
 
-  -- Table that contains each paddle
+  timer = 0
+
+  -- Becomes false if the user misses a ball
+  noneLost = true
+
+  -- Becomes true if the user presses the 'escape' key
+  paused = false
 
   -- Add three balls
   for n=1,3 do
@@ -24,15 +31,17 @@ function love.load()
 
   --Paddle initial x and y (roughly centered)
   createPaddle(#paddles, 400, 500)
-  x = 400
-  y = 500
   paddleHits = 0
 
+  -- Default move speed and direction for every ball
   ballMoveSpeed = 5
   direction = "downRight"
+
+  -- Load sound effect
   popSound = love.audio.newSource("pop-6.ogg", "static")
 end
 
+-- TODO: 
 function createPowerUp()
 
 end
@@ -54,12 +63,15 @@ function createBall(ballName, x, y, startDirection)
 end
 
 function love.update(dt)
+
+  -- Pause the game if the escape key is pressed
   if love.keyboard.isDown("escape") and paused == false then
     paused = true
   elseif love.keyboard.isDown("escape") and paused == true then
     paused = false
   end
 
+  -- If the game is not paused
   if paused == false then
     --timer = timer + 1
     --if timer == 150 and noneLost == true then
@@ -79,19 +91,23 @@ function love.update(dt)
 end
 
 function love.draw()
+
+  -- Draws each ball
   for _,v in pairs(balls) do
     love.graphics.rectangle("line", v.x, v.y, 25, 25)
   end
 
+  -- Draws each paddle
   for _,v in pairs(paddles) do
     love.graphics.rectangle("fill", v.x, v.y, 200, 20)
   end
 
+  -- On screen text
   love.graphics.print("Use wasd keys", 375, 550)
   love.graphics.print("Paddle Hits: " .. paddleHits, 10, 10)
 end
 
---TODO: Paddle only needs to move left and right
+
 function move_paddle(dt)
   for _,v in pairs(paddles) do
     if love.keyboard.isDown("a") then
@@ -129,19 +145,33 @@ function move_ball(dt)
   end
 end
 
+-- Changes the direction of a ball if it makes contact with the paddle
+-- Also plays sound when contact is made
 function paddleContact()
 
   paddleArea = 200 * 30 -- = 6000
   ballArea = 25 * 25 -- = 625
 
+  -- For each ball 
   for _,ball in pairs(balls) do
+    -- For each paddle 
     for _,paddle in pairs(paddles) do
-      paddleLow = paddle.x
-      paddleHigh = paddle.x + 200
+
+      -- Left and right edge of the paddle
+      paddleLeft = paddle.x
+      paddleRight = paddle.x + 200
+ 
+      --If the bottom edge of a ball makes contact with the paddle
       if ball.y + 20 >= paddle.y and ball.y <= paddle.y + 30 then
-        if ball.x >= paddleLow and ball.x <= paddleHigh then
+        --and the ball is between the left and right edge of the paddle
+        if ball.x >= paddleLeft and ball.x <= paddleRight then
+          -- Play sound effect
           popSound:play()
+
+          -- Increment paddleHits by one
           paddleHits = paddleHits + 1
+
+          -- Change direction of the ball depending on its current direction
           if ball.direction == "downRight" then
             ball.direction = "upRight"
           elseif ball.direction == "downLeft" then
@@ -153,28 +183,35 @@ function paddleContact()
   end
 end
 
+-- Changes the direction of a ball if it makes contact with a wall
 function wallContact()
   rightWall = love.graphics.getWidth()
   leftWall = 0
   topWall = 0
 
   for _,v in pairs(balls) do
+    -- If the right edge of the ball makes contact with the right wall
     if v.x + 25 >= rightWall then
       popSound:play()
+      -- Change the direction of the ball depending on its current direction
       if v.direction == "upRight" then
         v.direction = "upLeft"
       else
         v.direction = "downLeft"
       end
+    -- If the top of the ball makes contact with the 'roof' 
     elseif v.y <= topWall then
       popSound:play()
+      -- Change the direction of the ball depending on its current direction
       if v.direction == "upRight" then
         v.direction = "downRight"
       else
         v.direction = "downLeft"
       end
+    -- If the left edge of the ball makes contact with the left wall
     elseif v.x <= leftWall then
       popSound:play()
+      -- Change the direction of the ball depending on its current direction
       if v.direction == "downLeft" then
         v.direction = "downRight"
       else
