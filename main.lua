@@ -9,6 +9,7 @@ function love.load()
   power_ups = {}
   timer = 0
   noneLost = true
+  paused = false
 
   -- Table that contains each paddle
 
@@ -53,20 +54,28 @@ function createBall(ballName, x, y, startDirection)
 end
 
 function love.update(dt)
-  --timer = timer + 1
-  --if timer == 150 and noneLost == true then
-  --  createBall(math.random(), 300, 200, "downRight")
-  --  timer = 0
-  --end
-  if paddleHits >= 10 then
-    paddleHits = 0
-    createBall(math.random(), 300, 200, "upRight")
+  if love.keyboard.isDown("escape") and paused == false then
+    paused = true
+  elseif love.keyboard.isDown("escape") and paused == true then
+    paused = false
   end
 
-  move_paddle(dt)
-  move_ball(dt)
-  paddleContact()
-  wallContact()
+  if paused == false then
+    --timer = timer + 1
+    --if timer == 150 and noneLost == true then
+    --  createBall(math.random(), 300, 200, "downRight")
+    --  timer = 0
+    --end
+    if paddleHits >= 10 then
+      paddleHits = 0
+      createBall(math.random(), 300, 200, "upRight")
+    end
+
+    move_paddle(dt)
+    move_ball(dt)
+    paddleContact()
+    wallContact()
+  end
 end
 
 function love.draw()
@@ -79,7 +88,7 @@ function love.draw()
   end
 
   love.graphics.print("Use wasd keys", 375, 550)
-  love.graphics.print("Paddle Hits: " .. paddleHits, 375, 250)
+  love.graphics.print("Paddle Hits: " .. paddleHits, 10, 10)
 end
 
 --TODO: Paddle only needs to move left and right
