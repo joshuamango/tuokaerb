@@ -22,10 +22,10 @@ function love.load()
   end
 
   --Paddle initial x and y (roughly centered)
-  createPaddle(#paddles, 400, 500)
-  x = 400
-  y = 500
-  paddleHits = 0
+  --createPaddle(#paddles, 400, 500)
+  --x = 400
+  --y = 500
+  --paddleHits = 0
 
   ballMoveSpeed = 5
   direction = "downRight"
