@@ -1,3 +1,11 @@
+--[[ 
+
+  Created by Joshua Odeyemi
+  Influenced by Breakout
+  Last Update: 7/19/2018 
+
+--]]
+
 function love.load()
 
   -- Table that contains each ball
