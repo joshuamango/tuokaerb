@@ -13,6 +13,7 @@ function love.load()
 
   -- Table that contains each paddle (may add multiplayer in the future)
   paddles = {}
+  paddleNumber = 0
 
   -- Upcoming feature (^_^)
   power_up_definitions = {
@@ -38,7 +39,8 @@ function love.load()
   end
 
   --Paddle initial x and y (roughly centered)
-  createPaddle(#paddles, 400, 500)
+  createPaddle(400, 500, 1)
+  createPaddle(100, 500, 2)
   paddleHits = 0
 
   -- Default move speed and direction for every ball
@@ -54,12 +56,28 @@ function createPowerUp()
 
 end
 
-function createPaddle(paddle, x, y)
+function createPaddle(x, y, id)
+  one = "one"
+  two = "two"
+  three = "three"
+  four = "four"
+
   paddle = {}
   paddle.x = x
   paddle.y = y
+  paddle.id = id
   paddle.hits = 0
-  table.insert(paddles, paddle)
+
+  if paddleNumber == 0 then
+    table.insert(paddles, 1, paddle)
+  elseif paddleNumber == 1 then
+    table.insert(paddles, 2, paddle)
+  elseif paddleNumber == 2 then
+    table.insert(paddles, 3, paddle)
+  else
+    table.insert(paddles, 4, paddle)
+  end
+  paddleNumber = paddleNumber + 1
 end
 
 function createBall(ballName, x, y, startDirection)
@@ -113,15 +131,24 @@ function love.draw()
   -- On screen text
   love.graphics.print("Use wasd keys", 375, 550)
   love.graphics.print("Paddle Hits: " .. paddleHits, 10, 10)
+  love.graphics.print("Paddle Number: " .. paddleNumber, 10, 30)
 end
 
 
 function move_paddle(dt)
-  for _,v in pairs(paddles) do
-    if love.keyboard.isDown("a") then
-      v.x = v.x - 500 * dt
-    elseif love.keyboard.isDown("d") then
-      v.x = v.x + 500 * dt
+  for key,paddle in pairs(paddles) do
+    if paddle.id == 1 then
+      if love.keyboard.isDown("a") then
+        paddle.x = paddle.x - 500 * dt
+      elseif love.keyboard.isDown("d") then
+        paddle.x = paddle.x + 500 * dt
+      end
+    elseif paddle.id == 2 then
+      if love.keyboard.isDown("left") then
+        paddle.x = paddle.x - 500 * dt
+      elseif love.keyboard.isDown("right") then
+        paddle.x = paddle.x + 500 * dt
+      end
     end
   end
 end
