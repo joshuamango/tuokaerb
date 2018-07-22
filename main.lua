@@ -56,26 +56,24 @@ function createPowerUp()
 
 end
 
+-- Paddle creation function
 function createPaddle(x, y, id)
-
+  -- Create a paddle and initialize it with x and y values,
+  -- a hit counter, and an id
   paddle = {}
   paddle.x = x
   paddle.y = y
   paddle.id = id
   paddle.hits = 0
 
-  if paddleNumber == 0 then
-    table.insert(paddles, 1, paddle)
-  elseif paddleNumber == 1 then
-    table.insert(paddles, 2, paddle)
-  elseif paddleNumber == 2 then
-    table.insert(paddles, 3, paddle)
-  else
-    table.insert(paddles, 4, paddle)
-  end
+  -- Insert the paddle into the 'paddles' table
+  table.insert(paddles, #paddles, paddle)
+  
+  -- Increment the number of paddles 
   paddleNumber = paddleNumber + 1
 end
 
+-- Ball creation function
 function createBall(ballName, x, y, startDirection)
   ballName = {}
   ballName.x = x

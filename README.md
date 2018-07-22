@@ -5,6 +5,7 @@ Features:
 
   * Classic look
   * Easy to play
+  * Sound effects
   * More spheres get added over time
 
 ![Image](screenshot.PNG)
