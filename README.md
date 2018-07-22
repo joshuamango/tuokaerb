@@ -1,7 +1,7 @@
 # tuokaerb
-A game similar to breakout in Lua using the LOVE2D framework (in development)
+A game similar to breakout in Lua using the LOVE2D framework
 
-Features:
+Current Features:
 
   * Classic look
   * Easy to play
