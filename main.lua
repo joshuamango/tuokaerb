@@ -57,10 +57,6 @@ function createPowerUp()
 end
 
 function createPaddle(x, y, id)
-  one = "one"
-  two = "two"
-  three = "three"
-  four = "four"
 
   paddle = {}
   paddle.x = x
