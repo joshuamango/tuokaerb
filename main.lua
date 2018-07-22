@@ -19,7 +19,7 @@ function love.load()
   power_up_definitions = {
     speed = {factor = 2, time = 20}
   }
-  power_ups = {}
+  powerUps = {}
 
   timer = 0
 
@@ -47,13 +47,20 @@ function love.load()
   ballMoveSpeed = 5
   direction = "downRight"
 
+  -- Default move speed for each powerup
+  powerUpSpeed = 5
+
   -- Load sound effect
   popSound = love.audio.newSource("pop-6.ogg", "static")
 end
 
 -- TODO: 
-function createPowerUp()
-
+function createPowerUp(type)
+	power = {}
+	power.x = math.random(love.graphics.getWidth())
+	power.y = 0
+	power.type = type
+	table.insert(powerUps, #powerUps, power)
 end
 
 -- Paddle creation function
@@ -107,10 +114,12 @@ function love.update(dt)
     move_ball(dt)
     paddleContact()
     wallContact()
+    move_power()
   end
 end
 
 function love.draw()
+  timer = timer + 1
 
   -- Draws each ball
   for _,v in pairs(balls) do
@@ -122,10 +131,22 @@ function love.draw()
     love.graphics.rectangle("fill", v.x, v.y, 200, 20)
   end
 
+  if timer >= 600 then
+  	createPowerUp(nil)
+  	timer = 0
+  end
+
+  -- Draws each power up
+  for _,v in pairs(powerUps) do
+  	love.graphics.circle("fill", v.x, v.y, 15)
+  end
+
   -- On screen text
-  love.graphics.print("Use wasd keys", 375, 550)
+  love.graphics.print("Use wasd keys or arrow keys", 325, 550)
   love.graphics.print("Paddle Hits: " .. paddleHits, 10, 10)
   love.graphics.print("Paddle Number: " .. paddleNumber, 10, 30)
+  love.graphics.print("Timer: " .. timer, 10, 50)
+  love.graphics.print("Power Up Amount: " .. #powerUps, 10, 80)
 end
 
 
@@ -170,6 +191,15 @@ function move_ball(dt)
     if v.y > love.graphics.getHeight() then
       table.remove(balls, k)
       noneLost = false
+    end
+  end
+end
+
+function move_power(dt)
+  for k,v in pairs(powerUps) do
+    v.y = v.y + powerUpSpeed
+    if v.y > love.graphics.getHeight() then
+      table.remove(powerUps, k)
     end
   end
 end
