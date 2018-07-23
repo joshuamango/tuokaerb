@@ -5,6 +5,7 @@ Current Features:
 
   * Classic look
   * Easy to play
+  * Multiplayer
   * Sound effects
   * More spheres get added over time
   
