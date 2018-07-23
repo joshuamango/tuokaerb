@@ -7,5 +7,11 @@ Current Features:
   * Easy to play
   * Sound effects
   * More spheres get added over time
+  
+Future Additions:
 
+  * Menu system
+  * Color mode
+  * Power ups
+  
 ![Image](screenshot.PNG)
