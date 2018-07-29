@@ -1,5 +1,5 @@
 # tuokaerb
-A game similar to breakout in Lua using the LOVE2D framework
+A game similar to breakout in Lua using the [LÖVE framework](http://love2d.org)
 
 Current Features:
 
