@@ -11,7 +11,7 @@ function love.load()
   -- Table that contains each ball
   balls = {}
 
-  -- Table that contains each paddle (may add multiplayer in the future)
+  -- Table that contains each paddle 
   paddles = {}
   paddleNumber = 0
 
