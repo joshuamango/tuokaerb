@@ -2,11 +2,17 @@
 
   Created by Joshua Odeyemi
   Influenced by Breakout
-  Last Update: 7/22/2018 
+  Last Update: 8/7/2018 
+
+  The code is a bit messy because this project was not planned
+  out beforehand. 
 
 --]]
 
 function love.load()
+  
+  -- Load menu
+  menuActivated = true
 
   -- Table that contains each ball
   balls = {}
@@ -19,6 +25,7 @@ function love.load()
   power_up_definitions = {
     speed = {factor = 2, time = 20}
   }
+
   powerUps = {}
 
   timer = 0
@@ -47,8 +54,9 @@ function love.load()
   ballMoveSpeed = 5
   direction = "downRight"
 
-  -- Default move speed for each powerup
+  -- Default move speed and size for each powerup
   powerUpSpeed = 5
+  powerUpSize = 15
 
   -- Load sound effect
   popSound = love.audio.newSource("pop-6.ogg", "static")
@@ -98,8 +106,12 @@ function love.update(dt)
     paused = false
   end
 
+  if love.keyboard.isDown("t") then
+  	menuActivated = false
+  end
+
   -- If the game is not paused
-  if paused == false then
+  if paused == false and menuActivated == false then
     --timer = timer + 1
     --if timer == 150 and noneLost == true then
     --  createBall(math.random(), 300, 200, "downRight")
@@ -115,38 +127,49 @@ function love.update(dt)
     paddleContact()
     wallContact()
     move_power()
+    power_contact()
   end
 end
 
 function love.draw()
   timer = timer + 1
+  
+  if menuActivated then
+    love.graphics.print("Welcome to Tuokaerb!\nPress \"T\" to begin", 250, 250)
+  else
+	  -- Draws each ball
+	  for _,v in pairs(balls) do
+	    love.graphics.rectangle("line", v.x, v.y, 25, 25)
+	  end
 
-  -- Draws each ball
-  for _,v in pairs(balls) do
-    love.graphics.rectangle("line", v.x, v.y, 25, 25)
-  end
+	  -- Draws each paddle
+	  for _,v in pairs(paddles) do
+	    love.graphics.rectangle("fill", v.x, v.y, 200, 20)
+	  end
 
-  -- Draws each paddle
-  for _,v in pairs(paddles) do
-    love.graphics.rectangle("fill", v.x, v.y, 200, 20)
-  end
+	  -- Creates a power up every 600 frames (about 10 seconds)
+	  if timer >= 600 then
+	  	createPowerUp(nil)
+	  	timer = 0
+	  end
 
-  if timer >= 600 then
-  	createPowerUp(nil)
-  	timer = 0
-  end
+	  -- Draws each power up
+	  for _,v in pairs(powerUps) do
+	  	love.graphics.circle("fill", v.x, v.y, powerUpSize)
+	  end
 
-  -- Draws each power up
-  for _,v in pairs(powerUps) do
-  	love.graphics.circle("fill", v.x, v.y, 15)
-  end
+	  -- On screen text
+	  love.graphics.print("Use wasd keys or arrow keys", 325, 550)
+	  love.graphics.print("Paddle Hits: " .. paddleHits, 10, 10)
+	  love.graphics.print("Paddle Number: " .. paddleNumber, 10, 30)
+	  love.graphics.print("Timer: " .. timer, 10, 50)
+	  love.graphics.print("Power Up Amount: " .. #powerUps, 10, 80)
 
-  -- On screen text
-  love.graphics.print("Use wasd keys or arrow keys", 325, 550)
-  love.graphics.print("Paddle Hits: " .. paddleHits, 10, 10)
-  love.graphics.print("Paddle Number: " .. paddleNumber, 10, 30)
-  love.graphics.print("Timer: " .. timer, 10, 50)
-  love.graphics.print("Power Up Amount: " .. #powerUps, 10, 80)
+	  --TODO: This does not work
+	  if #balls == 0 then
+	    love.graphics.print("GAME OVER", love.graphics.getWidth(), love.graphics.getHeight())
+	  end
+	end
 end
 
 
@@ -277,5 +300,28 @@ function wallContact()
         v.direction = "upRight"
       end
     end
+  end
+end
+
+function power_contact()
+  local radius = powerUpSize -- currently 15
+  local area = math.pi * (radius * radius)
+
+  local plength = 200
+  local pwidth = 30
+  local parea = 6000
+
+  for k,power in pairs(powerUps) do
+  	if power.y > 200 then
+  		table.remove(powerUps, k)
+  	end
+  	for l,paddle in pairs(paddles) do
+  	  -- If the bottom of the spower up is 
+      if power.x >= paddle.x and power.x <= paddle.x + plength then
+      	if power.y >= paddle.y and power.y <= paddle.y + pwidth then
+      		table.remove(powerUps, k)
+      	end
+      end
+  	end
   end
 end
