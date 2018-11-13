@@ -2,7 +2,7 @@
 
   Created by Joshua Odeyemi
   Influenced by Breakout
-  Last Update: 8/7/2018 
+  Last Update: 11/13/2018 
 
   The code is a bit messy because this project was not planned
   out beforehand. 
@@ -169,7 +169,7 @@ function love.draw()
 	  love.graphics.print("Timer: " .. timer, 10, 50)
 	  love.graphics.print("Power Up Amount: " .. #powerUps, 10, 80)
 
-	  --TODO: This does not work
+	  -- Displays "GAME OVER" when no balls are left in play
 	  if #balls <= 0 then
 	  	endActivated = true
 	    love.graphics.print("GAME OVER", love.graphics.getWidth(), love.graphics.getHeight())
