@@ -10,6 +10,8 @@
 --]]
 
 function love.load()
+
+  endActivated = false
   
   -- Load menu
   menuActivated = true
@@ -37,7 +39,7 @@ function love.load()
   paused = false
 
   -- Add three balls
-  for n=1,3 do
+  for n=1,1 do
     if n % 2 == 0 then
       createBall(n, 50 * n, 50 * n, "upLeft")
     else
@@ -136,6 +138,8 @@ function love.draw()
   
   if menuActivated then
     love.graphics.print("Welcome to Tuokaerb!\nPress \"T\" to begin", 250, 250)
+  elseif endActivated then
+  	love.graphics.print("GAME OVER", 250, 250)
   else
 	  -- Draws each ball
 	  for _,v in pairs(balls) do
@@ -166,7 +170,8 @@ function love.draw()
 	  love.graphics.print("Power Up Amount: " .. #powerUps, 10, 80)
 
 	  --TODO: This does not work
-	  if #balls == 0 then
+	  if #balls <= 0 then
+	  	endActivated = true
 	    love.graphics.print("GAME OVER", love.graphics.getWidth(), love.graphics.getHeight())
 	  end
 	end
